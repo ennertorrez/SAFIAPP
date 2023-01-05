@@ -245,7 +245,6 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                 FormaPagoH,
                 ConfigH, ClientesSucursalH, ArticulosH, UsuariosH, PedidoH, PedidoDetalleH, TPreciosH,RutasH,EscalaPreciosH);
 
-
         ValidarUltimaVersion();
         if (isOnline) {
             SincronizarConfig();
@@ -639,6 +638,7 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                                                       for (HashMap<String, String> item : listaArticulos) {
                                                           subTotalPrecioSuper += Double.parseDouble(item.get("SubTotal").replace(",", ""));
                                                       }
+                                                      RefrescarGrid();
                                                       ValidarPreciosEscala();
                                                       AplicarBonificacionCombinada();
                                                       RefrescarGrid();
@@ -967,6 +967,7 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                             for (HashMap<String, String> item : listaArticulos) {
                                 subTotalPrecioSuper += Double.parseDouble(item.get("SubTotal").replace(",", ""));
                             }
+                            RefrescarGrid();
                             ValidarPreciosEscala();
                             AplicarBonificacionCombinada();
                             RefrescarGrid();
@@ -1094,6 +1095,8 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                 RefrescarGrid();
                 CalcularTotales();
             }
+            cantidad=0;
+            existe = false;
         }
     }
 
@@ -1202,6 +1205,9 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                 RefrescarGrid();
                 CalcularTotales();
             }
+            cantidad=0;
+            precio=0;
+            entra=false;
         }
     }
 
@@ -1841,7 +1847,7 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                     }
                     adapter.notifyDataSetChanged();
                     lv.setAdapter(adapter);
-
+                    RefrescarGrid();
                     ValidarPreciosEscala();
                     AplicarBonificacionCombinada();
                     CalcularTotales();
@@ -1963,7 +1969,7 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                                 listaArticulos.set(info.position,itemArticulo2);
                                 adapter.notifyDataSetChanged();
                                 lv.setAdapter(adapter);
-
+                                RefrescarGrid();
                                 ValidarPreciosEscala();
                                 AplicarBonificacionCombinada();
                                 CalcularTotales();
