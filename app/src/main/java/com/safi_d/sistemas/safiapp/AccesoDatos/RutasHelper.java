@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,6 +37,7 @@ public class RutasHelper {
         database.execSQL("DELETE FROM "+variables_publicas.TABLE_RUTAS+";");
         Log.d("Rutas_elimina", "Datos eliminados");
     }
+    @SuppressLint("Range")
     public List<Ruta> ObtenerListaRutas() {
         List<Ruta> list = new ArrayList<Ruta>();
         String sqlQuery ="SELECT DISTINCT " + variables_publicas.RUTA_COLUMN_idRuta  + "," + variables_publicas.RUTA_COLUMN_ruta  + " FROM " + variables_publicas.TABLE_RUTAS  + " ";
@@ -51,6 +53,7 @@ public class RutasHelper {
         c.close();
         return list;
     }
+    @SuppressLint("Range")
     public List<Ruta> ObtenerRutaVendedor(int idVendedor) {
         List<Ruta> list = new ArrayList<Ruta>();
         String sqlQuery ="SELECT DISTINCT " + variables_publicas.RUTA_COLUMN_idRuta  + "," + variables_publicas.RUTA_COLUMN_ruta  + " FROM " + variables_publicas.TABLE_RUTAS  + " WHERE " + variables_publicas.RUTA_COLUMN_vendedor  + "="+ idVendedor +"";

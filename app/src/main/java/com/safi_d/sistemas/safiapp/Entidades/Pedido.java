@@ -21,11 +21,12 @@ public class Pedido {
     String Total="";
     String TCambio="";
     String Empresa="";
-
+    String Latitud="";
+    String Longitud="";
     public Pedido() {
     }
 
-    public Pedido(String codigoPedido,String idVendedor, String idCliente,String tipo, String observacion, String idFormaPago, String idSucursal, String fecha, String usuario, String IMEI,String subtotal,String total,String tasa, String empresa) {
+    public Pedido(String codigoPedido,String idVendedor, String idCliente,String tipo, String observacion, String idFormaPago, String idSucursal, String fecha, String usuario, String IMEI,String subtotal,String total,String tasa, String empresa,String latitud, String longitud) {
         CodigoPedido=codigoPedido;
         IdVendedor = idVendedor;
         IdCliente = idCliente;
@@ -40,6 +41,8 @@ public class Pedido {
         this.Total=total;
         this.TCambio=tasa;
         this.Empresa=empresa;
+        Latitud=latitud;
+        Longitud=longitud;
     }
 
     public String getTipo() {
@@ -156,7 +159,21 @@ public class Pedido {
     public void setEmpresa(String empresa) {
         Empresa = empresa;
     }
+    public String getLatitud() {
+        return Latitud;
+    }
 
+    public void setLatitud(String latitud) {
+        Latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return Longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        Longitud = longitud;
+    }
     public String toString(){
         return  this.getCodigoPedido();
     }

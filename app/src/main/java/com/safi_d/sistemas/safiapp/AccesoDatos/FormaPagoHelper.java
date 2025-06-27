@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -44,6 +45,7 @@ public class FormaPagoHelper {
         Log.d("formaPago_elimina", "Datos eliminados");
     }
 
+    @SuppressLint("Range")
     public List<FormaPago> ObtenerListaFormaPago() {
         List<FormaPago> list = new ArrayList<FormaPago>();
         String selectQuery = "SELECT  * FROM " + variables_publicas.TABLE_FORMA_PAGO;
@@ -65,6 +67,7 @@ public class FormaPagoHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public FormaPago ObtenerFormaPago(String IdFormaPago) {
         FormaPago formaPago= new FormaPago();
         String selectQuery = "SELECT  * FROM " + variables_publicas.TABLE_FORMA_PAGO+ " where "+ variables_publicas.FORMA_PAGO_COLUMN_CODIGO+" = "+IdFormaPago + " ORDER BY "+ variables_publicas.FORMA_PAGO_COLUMN_DIAS;

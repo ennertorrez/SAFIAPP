@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -90,6 +91,7 @@ public class PedidosDetalleHelper {
         else return false;
     }
 
+    @SuppressLint("Range")
     public List<HashMap<String, String>> ObtenerPedidoDetalle(String CodigoPedido) {
         List<HashMap<String,String>> lst= new ArrayList<>();
         String sqlQuery ="SELECT  * FROM " + variables_publicas.TABLE_PEDIDOS_DETALLE + " WHERE " + variables_publicas.PEDIDOS_DETALLE_COLUMN_CodigoPedido + " = '" + CodigoPedido + "'";
@@ -123,6 +125,7 @@ public class PedidosDetalleHelper {
         return lst;
     }
 
+    @SuppressLint("Range")
     public ArrayList<HashMap<String, String>> ObtenerPedidoDetalleArrayList(String CodigoPedido) {
         ArrayList<HashMap<String,String>> lst= new ArrayList<>();
         String sqlQuery="SELECT  * FROM " + variables_publicas.TABLE_PEDIDOS_DETALLE + " WHERE " + variables_publicas.PEDIDOS_DETALLE_COLUMN_CodigoPedido + " = '" + CodigoPedido + "'";

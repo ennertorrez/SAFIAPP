@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/itemGeoCliente"
+        android:orderInCategory="100"
+        android:title="GeoReferenciar"
+        android:icon="@mipmap/ic_check_circle_black_48dp"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/itemVenta"
+        android:orderInCategory="100"
+        android:title="Realizar Venta"
+        android:icon="@mipmap/ic_check_circle_black_48dp"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/itemVisita"
+        android:orderInCategory="100"
+        android:title="Visita sin Venta"
+        android:icon="@mipmap/ic_check_circle_black_48dp"
+        app:showAsAction="never"
+        />
+</menu>

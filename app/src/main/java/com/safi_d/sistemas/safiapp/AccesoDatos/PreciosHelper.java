@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -54,6 +55,7 @@ public class PreciosHelper {
         Log.d("precios_elimina", "Datos eliminados");
     }
 
+    @SuppressLint("Range")
     public List<Precios> ObtenerPrecioPorUM(String CodigoArticulo, String TipoCliente, String codUM) {
         List<Precios> list = new ArrayList<Precios>();
 
@@ -82,6 +84,7 @@ public class PreciosHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public List<UnidadMedida> ObtenerUM(String CodigoArt, String CodTipoPrecio) {
         List<UnidadMedida> list = new ArrayList<UnidadMedida>();
         String sqlQuery ="SELECT DISTINCT " + variables_publicas.PRECIOS_COLUMN_COD_UM  + "," + variables_publicas.PRECIOS_COLUMN_UM  + " FROM " + variables_publicas.TABLE_PRECIOS  + " Where " + variables_publicas.PRECIOS_COLUMN_COD_TIPO_PRECIO + " = " + CodTipoPrecio + " and  " + variables_publicas.PRECIOS_COLUMN_CODIGO + " = '" + CodigoArt + "'";
@@ -98,6 +101,7 @@ public class PreciosHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public List<UnidadMedida> ObtenerListaUM(String CodTipoPrecio) {
         List<UnidadMedida> list = new ArrayList<UnidadMedida>();
         String Query = "SELECT DISTINCT " + variables_publicas.PRECIOS_COLUMN_COD_UM  + "," + variables_publicas.PRECIOS_COLUMN_UM  + " FROM " + variables_publicas.TABLE_PRECIOS  + " Where " + variables_publicas.PRECIOS_COLUMN_COD_TIPO_PRECIO + " = " + CodTipoPrecio + "";
@@ -113,6 +117,7 @@ public class PreciosHelper {
         c.close();
         return list;
     }
+    @SuppressLint("Range")
     public List<UnidadMedida> ObtenerUMxDescripcion(String vUm) {
         List<UnidadMedida> list = new ArrayList<UnidadMedida>();
         String Query = "SELECT DISTINCT " + variables_publicas.PRECIOS_COLUMN_COD_UM  + "," + variables_publicas.PRECIOS_COLUMN_UM  + " FROM " + variables_publicas.TABLE_PRECIOS  + " Where " + variables_publicas.PRECIOS_COLUMN_UM + " = '" + vUm + "'";
@@ -129,6 +134,7 @@ public class PreciosHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public List<TipoPrecio> ObtenerTipoPrecio() {
         List<TipoPrecio> list = new ArrayList<TipoPrecio>();
         String sqlQuery ="SELECT DISTINCT " + variables_publicas.PRECIOS_COLUMN_COD_TIPO_PRECIO  + "," + variables_publicas.PRECIOS_COLUMN_TIPO_PRECIO  + " FROM " + variables_publicas.TABLE_PRECIOS  + " ";

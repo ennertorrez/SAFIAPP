@@ -61,6 +61,10 @@
                 android:icon="@drawable/ic_menu_plussign"
 
                 android:title="Reporte Facturacion" />
+            <item
+                android:id="@+id/btnCumplimiento"
+                android:icon="@drawable/iconfinderbagdiscountsaleshop4177571_115982_115933"
+                android:title="Cumplimiento" />
         </menu>
     </item>
 </group>

@@ -58,7 +58,11 @@ public class DataBaseOpenHelper {
                     + variables_publicas.CLIENTES_COLUMN_Pais_Id + " TEXT,"
                     + variables_publicas.CLIENTES_COLUMN_Pais_Nombre + " TEXT, "
                     + variables_publicas.CLIENTES_COLUMN_IdTipoNegocio + " TEXT, "
-                    + variables_publicas.CLIENTES_COLUMN_TipoNegocio + " TEXT)");
+                    + variables_publicas.CLIENTES_COLUMN_TipoNegocio + " TEXT, "
+                    + variables_publicas.CLIENTES_COLUMN_Latitud + " TEXT, "
+                    + variables_publicas.CLIENTES_COLUMN_Longitud + " TEXT, "
+                    + variables_publicas.CLIENTES_COLUMN_Referenciado + " TEXT, "
+                    + variables_publicas.CLIENTES_COLUMN_Visita + " TEXT)");
 
             db.execSQL("CREATE TABLE " + variables_publicas.TABLE_USUARIOS + "( "
                     + variables_publicas.USUARIOS_COLUMN_Codigo + " TEXT , "
@@ -161,7 +165,9 @@ public class DataBaseOpenHelper {
                     + variables_publicas.PEDIDOS_COLUMN_Subtotal + " TEXT , "
                     + variables_publicas.PEDIDOS_COLUMN_Total + " TEXT , "
                     + variables_publicas.PEDIDOS_COLUMN_TCambio + " TEXT, "
-                    + variables_publicas.PEDIDOS_COLUMN_Empresa + " TEXT ) ");
+                    + variables_publicas.PEDIDOS_COLUMN_Empresa + " TEXT, "
+                    + variables_publicas.PEDIDOS_COLUMN_Latitud + " TEXT, "
+                    + variables_publicas.PEDIDOS_COLUMN_Longitud + " TEXT ) ");
 
 
             db.execSQL("CREATE TABLE " + variables_publicas.TABLE_PEDIDOS_DETALLE + " ("
@@ -225,6 +231,10 @@ public class DataBaseOpenHelper {
                     + variables_publicas.ESCALAPRECIOS_COLUMN_PRECIO1 + " TEXT , "
                     + variables_publicas.ESCALAPRECIOS_COLUMN_PRECIO2 + " TEXT , "
                     + variables_publicas.ESCALAPRECIOS_COLUMN_PRECIO3 + " TEXT ) ");
+
+            db.execSQL("CREATE TABLE " + variables_publicas.TABLE_MOTIVOS_NOVENTA + "( "
+                    + variables_publicas.MOTIVOS_NOVENTA_COLUMN_codigo + " TEXT , "
+                    + variables_publicas.MOTIVOS_NOVENTA_COLUMN_motivo + " TEXT ) ");
         }
 
         @Override
@@ -248,6 +258,7 @@ public class DataBaseOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + variables_publicas.TABLE_PROMOCIONES);
             db.execSQL("DROP TABLE IF EXISTS " + variables_publicas.TABLE_CATEGORIAS);
             db.execSQL("DROP TABLE IF EXISTS " + variables_publicas.TABLE_ESCALAPRECIOS);
+            db.execSQL("DROP TABLE IF EXISTS " + variables_publicas.TABLE_MOTIVOS_NOVENTA);
             onCreate(db);
         }
     }

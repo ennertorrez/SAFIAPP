@@ -1,6 +1,7 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -41,7 +42,8 @@ public class UsuariosHelper {
         else
             return false;
     }
-    public Usuario BuscarUsuarios(String Usuario,String Contrasenia) {
+    @SuppressLint("Range")
+    public Usuario BuscarUsuarios(String Usuario, String Contrasenia) {
         Usuario usuario=null;
         String selectQuery="SELECT * FROM " + variables_publicas.TABLE_USUARIOS
                 + " WHERE UPPER("+variables_publicas.USUARIOS_COLUMN_Usuario +") = UPPER('"+Usuario+"') AND "+ variables_publicas.USUARIOS_COLUMN_Contrasenia+" = '"+Contrasenia+"'";
@@ -67,6 +69,7 @@ public class UsuariosHelper {
         c.close();
         return usuario;
     }
+    @SuppressLint("Range")
     public Usuario BuscarUltimoUsuario() {
         Usuario usuario=null;
         String selectQuery="SELECT * FROM " + variables_publicas.TABLE_USUARIOS+" LIMIT 1";

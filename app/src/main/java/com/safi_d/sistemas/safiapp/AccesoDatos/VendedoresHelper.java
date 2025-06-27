@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -53,6 +54,7 @@ public class VendedoresHelper {
         Log.d("vendedores_elimina", "Datos eliminados");
     }
 
+    @SuppressLint("Range")
     public List<Vendedor> ObtenerListaVendedores() {
         List<Vendedor> list = new ArrayList<Vendedor>();
 
@@ -84,6 +86,7 @@ public class VendedoresHelper {
         return list;
     }
 
+        @SuppressLint("Range")
         public List<Ruta> ObtenerListaRutas(String CodigoSupervisor) {
         List<Ruta> list = new ArrayList<Ruta>();
 
@@ -109,6 +112,7 @@ public class VendedoresHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public List<Ruta> ObtenerRutavendedor(String CodigoVendedor) {
         List<Ruta> list = new ArrayList<Ruta>();
 
@@ -127,6 +131,7 @@ public class VendedoresHelper {
         cursor.close();
         return list;
     }
+    @SuppressLint("Range")
     public List<Ruta> ObtenerTodasRutas() {
         List<Ruta> list = new ArrayList<Ruta>();
 
@@ -151,6 +156,7 @@ public class VendedoresHelper {
 
         return list;
     }
+    @SuppressLint("Range")
     public List<Supervisor> ObtenerTodosSupervisores() {
         List<Supervisor> list = new ArrayList<Supervisor>();
 
@@ -176,6 +182,7 @@ public class VendedoresHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public Vendedor ObtenerVendedor(String Codigo) {
         Vendedor vendedor= null;
         String selectQuery = "SELECT  * FROM " + variables_publicas.TABLE_VENDEDORES+ " WHERE "+variables_publicas.VENDEDORES_COLUMN_CODIGO+ " = "+Codigo;
@@ -199,6 +206,7 @@ public class VendedoresHelper {
         cursor.close();
         return vendedor;
     }
+    @SuppressLint("Range")
     public List<Vendedor> ObtenerVendedorxSup(String vCodSupervisor) {
         List<Vendedor> list = new ArrayList<Vendedor>();
 //        String selectQuery = "SELECT  * FROM " + variables_publicas.TABLE_VENDEDORES+ " WHERE "+ variables_publicas.VENDEDORES_COLUMN_codsuper +"= "+ vCodSupervisor +" ORDER BY "+ variables_publicas.VENDEDORES_COLUMN_NOMBRE ;

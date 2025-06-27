@@ -40,7 +40,7 @@ import static com.safi_d.sistemas.safiapp.Auxiliar.Funciones.Codificar;
 
 public class SincronizarDatos {
 
-    private String urlClientes = variables_publicas.direccionIp + "/ServicioClientes.svc/BuscarClientes";
+    private String urlClientes = variables_publicas.direccionIp + "/ServicioClientes.svc/BuscarClientes2";
     private String urlDptoMuniBarrios = variables_publicas.direccionIp + "/ServicioClientes.svc/ObtenerDptoMuniBarrios";
     private String urlRutas = variables_publicas.direccionIp + "/ServicioClientes.svc/GetRutas/";
     private String urlArticulos = variables_publicas.direccionIp + "/ServicioTotalArticulos.svc/BuscarTotalArticulo";
@@ -371,8 +371,7 @@ public class SincronizarDatos {
         ClientesH.EliminaClientes();
         JSONObject jsonObjC = new JSONObject(jsonStrC);
         // Getting JSON Array node
-        JSONArray clientes = jsonObjC.getJSONArray("BuscarClientesResult");
-
+        JSONArray clientes = jsonObjC.getJSONArray("BuscarClientes2Result");
 
         try {
             // looping through All Contacts
@@ -411,10 +410,14 @@ public class SincronizarDatos {
                 String Pais_Nombre = c.getString("Pais_Nombre");
                 String IdTipoNegocio = c.getString("IdTipoNegocio");
                 String TipoNegocio = c.getString("TipoNegocio");
+                String Latitud = c.getString("Latitud");
+                String Longitud = c.getString("Longitud");
+                String Referenciado = c.getString("Referenciado");
+                String Visita = c.getString("Visita");
                 ClientesH.GuardarClientes(IdCliente, Nombre,  FechaCreacion, Telefono, Direccion, IdDepartamento, IdMunicipio,
                         Ciudad, Ruc, Cedula, LimiteCredito, IdFormaPago, IdVendedor, Excento, CodigoLetra, Ruta,NombreRuta,
                         Frecuencia, PrecioEspecial, FechaUltimaCompra, Tipo,TipoPrecio, Descuento, Empleado, IdSupervisor,Empresa,
-                        Cod_Zona,Cod_SubZona,Pais_Id,Pais_Nombre,IdTipoNegocio,TipoNegocio);
+                        Cod_Zona,Cod_SubZona,Pais_Id,Pais_Nombre,IdTipoNegocio,TipoNegocio,Latitud,Longitud,Referenciado,Visita);
             }
             DbOpenHelper.database.setTransactionSuccessful();
             return true;
@@ -735,18 +738,20 @@ public class SincronizarDatos {
 
         if (SincronizarArticulos()) {
              if (SincronizarClientes()) {
-                 if (SincronizarTPrecios()) {
-                     if (SincronizarEscalaPrecios()) {
-                         if (SincronizarCategorias()) {
-                             if (SincronizarVendedores()) {
-                                 if (SincronizarPromociones()) {
-                                     if (SincronizarFormaPago()) {
-                                         if (SincronizarRutas()) {
-                                             if (SincronizarClientesSucursal()) {
-                                                 if (SincronizarConfiguracionSistema()) {
-                                                     if (ActualizarUsuario()) {
-                                                         SincronizarPedidosLocales();
-                                                         return true;
+                 if (ObtenerMotivosNoVenta()) {
+                     if (SincronizarTPrecios()) {
+                         if (SincronizarEscalaPrecios()) {
+                             if (SincronizarCategorias()) {
+                                 if (SincronizarVendedores()) {
+                                     if (SincronizarPromociones()) {
+                                         if (SincronizarFormaPago()) {
+                                             if (SincronizarRutas()) {
+                                                 if (SincronizarClientesSucursal()) {
+                                                     if (SincronizarConfiguracionSistema()) {
+                                                         if (ActualizarUsuario()) {
+                                                             SincronizarPedidosLocales();
+                                                             return true;
+                                                         }
                                                      }
                                                  }
                                              }
@@ -762,10 +767,59 @@ public class SincronizarDatos {
         return false;
     }
 
+    private boolean ObtenerMotivosNoVenta() {
+
+        HttpHandler sh = new HttpHandler();
+        String urlString = variables_publicas.direccionIp + "/ServicioClientes.svc/ObtenerMotivosNoVisita";
+        String encodeUrl = "";
+        try {
+            URL Url = new URL(urlString);
+            URI uri = new URI(Url.getProtocol(), Url.getUserInfo(), Url.getHost(), Url.getPort(), Url.getPath(), Url.getQuery(), Url.getRef());
+            encodeUrl = uri.toURL().toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String jsonStr = sh.makeServiceCall(encodeUrl);
+
+        /**********************************BANCOS**************************************/
+        if (jsonStr != null) {
+            DbOpenHelper.database.beginTransactionNonExclusive();
+            try {
+                //DbOpenHelper.database.beginTransactionNonExclusive();
+                JSONObject jsonObj = new JSONObject(jsonStr);
+                // Getting JSON Array node
+                JSONArray motivos = jsonObj.getJSONArray("ObtenerMotivosNoVisitaResult");
+                if (motivos.length() == 0) {
+                    return false;
+                }
+                ClientesH.EliminarMotivosNoVenta();
+                // looping through All Contacts
+
+                for (int i = 0; i < motivos.length(); i++) {
+                    JSONObject c = motivos.getJSONObject(i);
+                    ClientesH.GuardarMotivosNoVenta(c.get("Codigo").toString(),c.get("Motivo").toString());
+                }
+                DbOpenHelper.database.setTransactionSuccessful();
+                return true;
+            } catch (Exception ex) {
+                Log.e("Error", ex.getMessage());
+                new Funciones().SendMail("Ha ocurrido un error al obtener el listado de Motivos No Venta,Excepcion controlada", variables_publicas.info + ex.getMessage(), "dlunasistemas@gmail.com", variables_publicas.correosErrores);
+                return false;
+            }  finally {
+                DbOpenHelper.database.endTransaction();
+            }
+
+        } else {
+            new Funciones().SendMail("Ha ocurrido un error al obtener el Listado de Motivos No Venta,Respuesta nula", variables_publicas.info + urlString, "dlunasistemas@gmail.com", variables_publicas.correosErrores);
+            return false;
+        }
+    }
 
     public void SincronizarTablas() throws JSONException {
         SincronizarArticulos();
         SincronizarClientes();
+        ObtenerMotivosNoVenta();
         SincronizarRutas();
         SincronizarEscalaPrecios();
         SincronizarPromociones();
@@ -917,7 +971,7 @@ public class SincronizarDatos {
             item.put("Descripcion", Codificar(item.get("Descripcion")));
         }
         String jsonPedidoDetalle = gson.toJson(pedidoDetalle);
-        final String urlDetalle = variables_publicas.direccionIp + "/ServicioPedidos.svc/SincronizarPedidoTotal/";
+        final String urlDetalle = variables_publicas.direccionIp + "/ServicioPedidos.svc/SincronizarPedidoTotalGeo2/";
         final String urlStringDetalle = urlDetalle + cliente.getIdCliente() + "/" + String.valueOf(Editar) + "/" + vendedor.getCODIGO() + "/" + jsonPedido + "/" + jsonPedidoDetalle+ "/" + cliente.getEmpresa();
 
         HashMap<String,String> postData = new HashMap<>();
@@ -937,12 +991,12 @@ public class SincronizarDatos {
         } else {
             try {
                 JSONObject result = new JSONObject(jsonStrPedido);
-                String resultState = (String) ((String) result.get("SincronizarPedidoTotalResult")).split(",")[0];
-                String NoPedido = (String) ((String) result.get("SincronizarPedidoTotalResult")).split(",")[1];
+                String resultState = (String) ((String) result.get("SincronizarPedidoTotalGeo2Result")).split(",")[0];
+                String NoPedido = (String) ((String) result.get("SincronizarPedidoTotalGeo2Result")).split(",")[1];
                 if (resultState.equals("false")) {
 
                     if (NoPedido.equalsIgnoreCase("Pedido ya existe en base de datos")) {
-                        NoPedido =  ((String) result.get("SincronizarPedidoTotalResult")).split(",")[1];
+                        NoPedido =  ((String) result.get("SincronizarPedidoTotalGeo2Result")).split(",")[1];
                     } else {
                         new Funciones().SendMail("Ha ocurrido un error al sincronizar el pedido ,Respuesta false", variables_publicas.info + NoPedido +" *** "+urlStringDetalle, "dlunasistemas@gmail.com", variables_publicas.correosErrores);
                         return "false," + NoPedido;
@@ -1109,7 +1163,7 @@ public class SincronizarDatos {
          public static boolean ObtenerPedidoGuardado(String vPedido, PedidosHelper vpedidoh) {
 
         HttpHandler sh = new HttpHandler();
-        String urlString = variables_publicas.direccionIp + "/ServicioPedidos.svc/ObtenerPedidoCabecera/" + vPedido;
+        String urlString = variables_publicas.direccionIp + "/ServicioPedidos.svc/ObtenerPedidoCabecera2/" + vPedido;
         String encodeUrl = "";
         try {
             URL Url = new URL(urlString);
@@ -1126,14 +1180,14 @@ public class SincronizarDatos {
 
             try {
                 JSONObject jsonObj = new JSONObject(jsonStr);
-                JSONArray pedido = jsonObj.getJSONArray("ObtenerPedidoCabeceraResult");
+                JSONArray pedido = jsonObj.getJSONArray("ObtenerPedidoCabecera2Result");
                 if (pedido.length() == 0) {
                     return false;
                 }
                 vpedidoh.EliminaPedido(vPedido);
                 for (int i = 0; i < pedido.length(); i++) {
                     JSONObject c = pedido.getJSONObject(i);
-                    vpedidoh.GuardarPedido(c.get("CodigoPedido").toString(),c.get("IdVendedor").toString(),c.get("IdCliente").toString(),c.get("Tipo").toString(),c.get("Observacion").toString(),c.get("IdFormaPago").toString(),c.get("IdSucursal").toString(),c.get("Fecha").toString(),c.get("Usuario").toString(),c.get("IMEI").toString(),c.get("Subtotal").toString(),c.get("Total").toString(),c.get("TCambio").toString(),c.get("Empresa").toString());
+                    vpedidoh.GuardarPedido(c.get("CodigoPedido").toString(),c.get("IdVendedor").toString(),c.get("IdCliente").toString(),c.get("Tipo").toString(),c.get("Observacion").toString(),c.get("IdFormaPago").toString(),c.get("IdSucursal").toString(),c.get("Fecha").toString(),c.get("Usuario").toString(),c.get("IMEI").toString(),c.get("Subtotal").toString(),c.get("Total").toString(),c.get("TCambio").toString(),c.get("Empresa").toString(),c.get("Latitud").toString(),c.get("Longitud").toString());
                 }
                 return true;
             } catch (Exception ex) {

@@ -1,6 +1,7 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,6 +36,7 @@ public class ConfiguracionSistemaHelper {
         else
             return false;
     }
+    @SuppressLint("Range")
     public Configuraciones BuscarValorConfig(String Configuracion) {
         Configuraciones configuraciones = null;
         String selectQuery="SELECT * FROM " + variables_publicas.TABLE_CONFIGURACION_SISTEMA

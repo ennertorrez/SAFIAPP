@@ -3,6 +3,7 @@ package com.safi_d.sistemas.safiapp.AccesoDatos;
 /**
  * Created by Enner Torrez on 22/10/2019.
  */
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -47,6 +48,7 @@ public class ZonasHelper {
         Log.d("Zonas_elimina", "Datos eliminados");
     }
 
+    @SuppressLint("Range")
     public List<ZonaL> ObtenerListaZonas() {
         List<ZonaL> list = new ArrayList<ZonaL>();
         String sqlQuery ="SELECT DISTINCT " + variables_publicas.ZONAS_COLUMN_CODZONA  + "," + variables_publicas.ZONAS_COLUMN_ZONA  + " FROM " + variables_publicas.TABLE_ZONAS  + " ";
@@ -63,6 +65,7 @@ public class ZonasHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public List<SubZona> ObtenerListaSubZonas(String zona) {
         List<SubZona> list = new ArrayList<SubZona>();
         String sqlQuery ="SELECT DISTINCT " + variables_publicas.ZONAS_COLUMN_CODSUBZONA  + "," + variables_publicas.ZONAS_COLUMN_SUBZONA  + " FROM " + variables_publicas.TABLE_ZONAS  + " WHERE " + variables_publicas.ZONAS_COLUMN_ZONA  + "='"+ zona +"'";

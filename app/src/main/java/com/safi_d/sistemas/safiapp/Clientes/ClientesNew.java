@@ -98,6 +98,9 @@ public class ClientesNew extends Activity implements ActivityCompat.OnRequestPer
     private boolean guardadoOK = false;
     private ProgressDialog pDialog;
     AlertDialog alertDialog;
+    private String vLati;
+    private String vLong;
+    private String vReferenciado;
     private int IdDepartamento;
 
     private TextView txtCodLetra;
@@ -283,6 +286,9 @@ public class ClientesNew extends Activity implements ActivityCompat.OnRequestPer
             vNombrePais=in.getStringExtra(variables_publicas.CLIENTES_COLUMN_Pais_Nombre);
             vNombreRuta=in.getStringExtra(variables_publicas.CLIENTES_COLUMN_NombreRuta);
             vDescTipoNegocio =in.getStringExtra(variables_publicas.CLIENTES_COLUMN_TipoNegocio);
+            vLati =  in.getStringExtra(variables_publicas.CLIENTES_COLUMN_Latitud);
+            vLong =  in.getStringExtra(variables_publicas.CLIENTES_COLUMN_Longitud);
+            vReferenciado=  in.getStringExtra(variables_publicas.CLIENTES_COLUMN_Referenciado);
         }
 
         /*iCurrentSelection = cboZona.getSelectedItemPosition();
@@ -521,6 +527,10 @@ public class ClientesNew extends Activity implements ActivityCompat.OnRequestPer
             cliente.setIdTipoNegocio(vTipoNegocio.getCod_Cat());
             vDescTipoNegocio = ClientesH.ObtenerDescripcion(variables_publicas.CATEGORIAS_COLUMN_Categoria,variables_publicas.TABLE_CATEGORIAS,variables_publicas.CATEGORIAS_COLUMN_Cod_Cat,vTipoNegocio.getCod_Cat());
             cliente.setTipoNegocio(vDescTipoNegocio);
+            cliente.setLatitud("");
+            cliente.setLongitud("");
+            cliente.setReferenciado("0");
+            cliente.setVisita("NoVisita");
         }else {
             cliente.setIdCliente(txtCodCliente.getText().toString());
             cliente.setNombre(txtNombreCliente.getText().toString());
@@ -562,6 +572,10 @@ public class ClientesNew extends Activity implements ActivityCompat.OnRequestPer
             cliente.setIdTipoNegocio(vTipoNegocio.getCod_Cat());
             vDescTipoCliente = ClientesH.ObtenerDescripcion(variables_publicas.CATEGORIAS_COLUMN_Categoria,variables_publicas.TABLE_CATEGORIAS,variables_publicas.CATEGORIAS_COLUMN_Cod_Cat,vTipoNegocio.getCod_Cat());
             cliente.setTipoNegocio(vDescTipoCliente);
+            cliente.setLatitud(vLati);
+            cliente.setLongitud(vLong);
+            cliente.setReferenciado(vReferenciado);
+            cliente.setVisita("NoVisita");
         }
 
         ClientesH.EliminaCliente(cliente.getIdCliente());
@@ -594,7 +608,8 @@ public class ClientesNew extends Activity implements ActivityCompat.OnRequestPer
                         cliente.getDireccion(), cliente.getIdDepartamento(), cliente.getIdMunicipio(), cliente.getCiudad(), cliente.getRuc(), cliente.getCedula(), cliente.getLimiteCredito(),
                         cliente.getIdFormaPago(), cliente.getIdVendedor(), cliente.getExcento(), cliente.getCodigoLetra(), cliente.getRuta(), cliente.getNombreRuta(),cliente.getFrecuencia(), cliente.getPrecioEspecial(),
                         cliente.getFechaUltimaCompra(), cliente.getTipo(),cliente.getTipoPrecio(), cliente.getDescuento(), cliente.getEmpleado(), cliente.getIdSupervisor(), cliente.getEmpresa(),
-                        cliente.getCod_Zona(), cliente.getCod_SubZona(),cliente.getPais_Id(),cliente.getPais_Nombre(),cliente.getIdTipoNegocio(), cliente.getTipoNegocio());
+                        cliente.getCod_Zona(), cliente.getCod_SubZona(),cliente.getPais_Id(),cliente.getPais_Nombre(),cliente.getIdTipoNegocio(), cliente.getTipoNegocio(),cliente.getLatitud(),
+                cliente.getLongitud(),cliente.getReferenciado(),cliente.getVisita());
         if (!saved) {
             MensajeAviso("Ha Ocurrido un error al guardar los datos");
             return false;

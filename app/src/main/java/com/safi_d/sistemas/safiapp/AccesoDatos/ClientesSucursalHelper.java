@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -53,6 +54,7 @@ public class ClientesSucursalHelper {
         database.execSQL("DELETE FROM "+variables_publicas.TABLE_CLIENTES_SUCURSALES+";");
         Log.d("ClientesSuc_elimina", "Datos eliminados");
     }
+    @SuppressLint("Range")
     public List<ClienteSucursal> ObtenerListaClientesSucursales(String IdCliente){
         List<ClienteSucursal> list = new ArrayList<ClienteSucursal>();
 
@@ -81,6 +83,7 @@ public class ClientesSucursalHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public List<ClienteSucursal> ObtenerClienteSucursales(String IdCliente){
         List<ClienteSucursal> list = new ArrayList<ClienteSucursal>();
         String selectQuery = "SELECT  * FROM " + variables_publicas.TABLE_CLIENTES_SUCURSALES+" where "+variables_publicas.CLIENTES_SUCURSALES_COLUMN_CodCliente+" = "+IdCliente+ " ORDER BY "+variables_publicas.CLIENTES_SUCURSALES_COLUMN_Sucursal;

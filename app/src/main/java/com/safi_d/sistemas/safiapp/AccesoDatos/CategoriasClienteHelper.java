@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -39,6 +40,7 @@ public class CategoriasClienteHelper {
         return deletedrows!=-1;
     }
 
+    @SuppressLint("Range")
     public List<ClienteCategoria> ObtenerCategorias() {
         List<ClienteCategoria> list = new ArrayList<ClienteCategoria>();
 

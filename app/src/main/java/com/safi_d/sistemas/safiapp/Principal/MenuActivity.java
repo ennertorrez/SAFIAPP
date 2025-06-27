@@ -58,6 +58,7 @@ import com.safi_d.sistemas.safiapp.Menu.ClientesFragment;
 import com.safi_d.sistemas.safiapp.Clientes.ClientesNew;
 import com.safi_d.sistemas.safiapp.Menu.ClientesInactivosFragment;
 import com.safi_d.sistemas.safiapp.Menu.HistoricoventasClienteFragment;
+import com.safi_d.sistemas.safiapp.Menu.ListaEfectividadSupervisor;
 import com.safi_d.sistemas.safiapp.Menu.ListaPedidosFragment;
 import com.safi_d.sistemas.safiapp.Menu.ListaPedidosSupFragment;
 import com.safi_d.sistemas.safiapp.Menu.ListaTotalFacturado;
@@ -468,6 +469,13 @@ public class MenuActivity extends AppCompatActivity
                 tran.commit();
                 break;
 
+            case R.id.btnCumplimiento:
+                fragmentManager.executePendingTransactions();
+                tran = getFragmentManager().beginTransaction();
+                tran.add(R.id.content_frame, new ListaEfectividadSupervisor() );
+                tran.addToBackStack(null);
+                tran.commit();
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

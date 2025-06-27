@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,6 +36,7 @@ public class TPreciosHelper {
         Log.d("tprecios_elimina", "Datos eliminados");
     }
 
+        @SuppressLint("Range")
         public List<TipoPrecio> ObtenerTipoPrecio() {
         List<TipoPrecio> list = new ArrayList<TipoPrecio>();
         String sqlQuery ="SELECT DISTINCT " + variables_publicas.TPRECIOS_COLUMN_COD_TIPO_PRECIO  + "," + variables_publicas.TPRECIOS_COLUMN_TIPO_PRECIO  + " FROM " + variables_publicas.TABLE_TPRECIOS  + " ";
@@ -51,6 +53,7 @@ public class TPreciosHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public List<TipoPrecio> ObtenerTipoPrecio2(String idCodPrecio) {
         List<TipoPrecio> list = new ArrayList<TipoPrecio>();
         String sqlQuery ="SELECT DISTINCT " + variables_publicas.TPRECIOS_COLUMN_COD_TIPO_PRECIO  + "," + variables_publicas.TPRECIOS_COLUMN_TIPO_PRECIO  + " FROM " + variables_publicas.TABLE_TPRECIOS  + " WHERE "+ variables_publicas.TPRECIOS_COLUMN_COD_TIPO_PRECIO +" = "+ idCodPrecio +" ";
@@ -67,6 +70,7 @@ public class TPreciosHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public List<Articulo> ObtenerPrecioPorUM(String CodigoArticulo) {
         List<Articulo> list = new ArrayList<Articulo>();
 

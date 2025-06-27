@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,7 +30,13 @@ public class PedidosHelper {
                                  String IdSucursal,
                                  String Fecha,
                                  String Usuario,
-                                 String IMEI,String Subtotal,String Total,String Tasa, String Empresa) {
+                                 String IMEI,
+                                 String Subtotal,
+                                 String Total,
+                                 String Tasa,
+                                 String Empresa,
+                                 String Latitud,
+                                 String Longitud) {
         long rows = 0;
         ContentValues contentValues = new ContentValues();
         contentValues.put(variables_publicas.PEDIDOS_COLUMN_CodigoPedido, CodigoPedido);
@@ -46,6 +53,8 @@ public class PedidosHelper {
         contentValues.put(variables_publicas.PEDIDOS_COLUMN_Total, Total);
         contentValues.put(variables_publicas.PEDIDOS_COLUMN_TCambio, Tasa);
         contentValues.put(variables_publicas.PEDIDOS_COLUMN_Empresa, Empresa);
+        contentValues.put(variables_publicas.PEDIDOS_COLUMN_Latitud, Latitud);
+        contentValues.put(variables_publicas.PEDIDOS_COLUMN_Longitud, Longitud);
         long rowInserted = database.insert(variables_publicas.TABLE_PEDIDOS, null, contentValues);
         if (rowInserted != -1)
             return true;
@@ -61,6 +70,7 @@ public class PedidosHelper {
         else return false;
     }
 
+    @SuppressLint("Range")
     public List<HashMap<String, String>> ObtenerListaPedidos() {
         HashMap<String, String> pedido = null;
         List<HashMap<String, String>> lst = new ArrayList<>();
@@ -83,6 +93,8 @@ public class PedidosHelper {
                 pedido.put(variables_publicas.PEDIDOS_COLUMN_Total,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Total)));
                 pedido.put(variables_publicas.PEDIDOS_COLUMN_TCambio,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_TCambio)));
                 pedido.put(variables_publicas.PEDIDOS_COLUMN_Empresa,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Empresa)));
+                pedido.put(variables_publicas.PEDIDOS_COLUMN_Latitud,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Latitud)));
+                pedido.put(variables_publicas.PEDIDOS_COLUMN_Longitud,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Longitud)));
                 lst.add(pedido);
             } while (c.moveToNext());
         }
@@ -111,6 +123,20 @@ public class PedidosHelper {
         return numero + 1;
     }
 
+    public int ObtenerClientePedido(String IdPedido) {
+
+        String selectQuery = "SELECT "+ variables_publicas.PEDIDOS_COLUMN_IdCliente +" FROM " + variables_publicas.TABLE_PEDIDOS + " WHERE "+ variables_publicas.PEDIDOS_COLUMN_CodigoPedido +" ='"+ IdPedido +"' ";
+        Cursor c = database.rawQuery(selectQuery, null);
+        int numero = 0;
+        if (c.moveToFirst()) {
+            do {
+                numero = c.getInt(0);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return numero ;
+    }
+    @SuppressLint("Range")
     public HashMap<String, String> ObtenerPedido(String CodigoPedido) {
 
         Cursor c = database.rawQuery("select * from " + variables_publicas.TABLE_PEDIDOS  + " Where " + variables_publicas.PEDIDOS_COLUMN_CodigoPedido + " = ?", new String[]{CodigoPedido});
@@ -132,12 +158,15 @@ public class PedidosHelper {
                 pedido.put(variables_publicas.PEDIDOS_COLUMN_Total,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Total)));
                 pedido.put(variables_publicas.PEDIDOS_COLUMN_TCambio,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_TCambio)));
                 pedido.put(variables_publicas.PEDIDOS_COLUMN_Empresa,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Empresa)));
+                pedido.put(variables_publicas.PEDIDOS_COLUMN_Latitud,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Latitud)));
+                pedido.put(variables_publicas.PEDIDOS_COLUMN_Longitud,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Longitud)));
             } while (c.moveToNext());
         }
         c.close();
         return pedido;
     }
 
+    @SuppressLint("Range")
     public Pedido GetPedido(String CodigoPedido) {
 
         Cursor c = database.rawQuery("select * from " + variables_publicas.TABLE_PEDIDOS + " Where " + variables_publicas.PEDIDOS_COLUMN_CodigoPedido + " = ?", new String[]{CodigoPedido});
@@ -159,12 +188,15 @@ public class PedidosHelper {
                 pedido.setTotal(c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Total)));
                 pedido.setTotal(c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_TCambio)));
                 pedido.setTotal(c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Empresa)));
+                pedido.setLatitud(c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Latitud)));
+                pedido.setLongitud(c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Longitud)));
             } while (c.moveToNext());
         }
         c.close();
         return pedido;
     }
 
+    @SuppressLint("Range")
     public ArrayList<HashMap<String, String>> ObtenerPedidosLocales(String Fecha, String Nombre) {
 
         String selectQuery = "SELECT P.*,DATE(P.Fecha) as Fecha,'' as Factura,'NO ENVIADO' as Estado,Cl.Nombre as NombreCliente,Fp.NOMBRE as FormaPago FROM " + variables_publicas.TABLE_PEDIDOS +
@@ -197,12 +229,15 @@ public class PedidosHelper {
                 pedido.put(variables_publicas.PEDIDOS_COLUMN_Total, c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Total)));
                 pedido.put(variables_publicas.PEDIDOS_COLUMN_TCambio, c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_TCambio)));
                 pedido.put(variables_publicas.PEDIDOS_COLUMN_Empresa, c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Empresa)));
+                pedido.put(variables_publicas.PEDIDOS_COLUMN_Latitud,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Latitud)));
+                pedido.put(variables_publicas.PEDIDOS_COLUMN_Longitud,c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Longitud)));
                 lst.add(pedido);
             } while (c.moveToNext());
         }
         c.close();
         return lst;
     }
+    @SuppressLint("Range")
     public Pedido BuscarPedidosSinconizar( ) {
         Pedido pedidos = null;
         String selectQuery="SELECT * FROM " + variables_publicas.TABLE_PEDIDOS+"";
@@ -222,7 +257,9 @@ public class PedidosHelper {
                         c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Subtotal)),
                         c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Total)),
                         c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_TCambio)),
-                        c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Empresa))
+                        c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Empresa)),
+                        c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Latitud)),
+                        c.getString(c.getColumnIndex(variables_publicas.PEDIDOS_COLUMN_Longitud))
                 ));
             } while (c.moveToNext());
         }

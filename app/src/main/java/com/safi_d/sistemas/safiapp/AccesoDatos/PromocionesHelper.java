@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,6 +36,7 @@ public class PromocionesHelper {
         Log.d("Promociones_elimina", "Datos eliminados");
     }
 
+    @SuppressLint("Range")
     public HashMap<String, String> BuscarPromocion(int promo){
         HashMap<String,String> promocionDetalle = new HashMap<String, String>();
 
@@ -56,6 +58,7 @@ public class PromocionesHelper {
         return promocionDetalle;
     }
 
+    @SuppressLint("Range")
     public int  BuscarCodPromocion(String producto) {
 
         String selectQuery = "SELECT pr."+ variables_publicas.PROMOCIONES_COLUMN_codPromo +" FROM "+variables_publicas.TABLE_PROMOCIONES+" PR " +

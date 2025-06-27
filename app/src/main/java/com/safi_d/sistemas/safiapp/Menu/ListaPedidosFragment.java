@@ -87,6 +87,7 @@ public class ListaPedidosFragment extends Fragment {
     final String urlPedidosVendedor = variables_publicas.direccionIp + "/ServicioPedidos.svc/ObtenerPedidosVendedor";
     private String jsonAnulaPedido;
     private String IdPedido;
+    private int IdCliente;
     private boolean guardadoOK = true;
     private DecimalFormat df;
     private boolean isOnline = false;
@@ -412,7 +413,7 @@ public class ListaPedidosFragment extends Fragment {
         String Empresa=variables_publicas.usuario.getEmpresa_ID();
         String encodeUrl = "";
         HttpHandler sh = new HttpHandler();
-        busqueda = busqueda.isEmpty() ? "%" : busqueda;
+        busqueda = busqueda.isEmpty() ? "0" : busqueda;
         String urlString = urlPedidosVendedor + "/" + CodigoVendedor + "/" + fecha + "/" + busqueda + "/" + Empresa;
         try {
             URL Url = new URL(urlString);
@@ -590,6 +591,7 @@ public class ListaPedidosFragment extends Fragment {
 
                     } else {
                         guardadoOK = true;
+                        ClientesH.ActualizarVisita(String.valueOf(IdCliente),"NoCompra");
                     }
 
 
@@ -719,6 +721,7 @@ public class ListaPedidosFragment extends Fragment {
                     pedido = PedidosH.ObtenerPedido(itemPedido.get(variables_publicas.PEDIDOS_COLUMN_CodigoPedido));
 
                     IdPedido = itemPedido.get(variables_publicas.PEDIDOS_COLUMN_CodigoPedido);
+                    IdCliente = PedidosH.ObtenerClientePedido(IdPedido);
                     if (itemPedido.get(variables_publicas.PEDIDOS_COLUMN_CodigoPedido).startsWith("-")) {
                         //final HashMap<String, String> finalPedido = pedido;
                         new AlertDialog.Builder(getActivity())
@@ -846,17 +849,20 @@ public class ListaPedidosFragment extends Fragment {
                         }
                     }
                     String IdCliente = pedido.get("IdCliente");
-                    Cliente cliente = ClientesH.BuscarCliente(IdCliente);
-                    String Nombre = cliente.getNombre();
-                    // Starting new intent
-                    Intent in = new Intent(getActivity().getApplicationContext(), PedidosActivity.class);
 
-                    in.putExtra(variables_publicas.CLIENTES_COLUMN_IdCliente, IdCliente);
-                    in.putExtra(variables_publicas.CLIENTES_COLUMN_Nombre, Nombre);
-                    in.putExtra(variables_publicas.PEDIDOS_COLUMN_CodigoPedido, CodigoPedido);
-                    in.putExtra(variables_publicas.vVisualizar,"True");
-                    startActivity(in);
 
+                        Cliente cliente = ClientesH.BuscarCliente(IdCliente);
+                        String Nombre = cliente.getNombre();
+                        if (!Nombre.equalsIgnoreCase("")){
+                        // Starting new intent
+                        Intent in = new Intent(getActivity().getApplicationContext(), PedidosActivity.class);
+
+                        in.putExtra(variables_publicas.CLIENTES_COLUMN_IdCliente, IdCliente);
+                        in.putExtra(variables_publicas.CLIENTES_COLUMN_Nombre, Nombre);
+                        in.putExtra(variables_publicas.PEDIDOS_COLUMN_CodigoPedido, CodigoPedido);
+                        in.putExtra(variables_publicas.vVisualizar,"True");
+                        startActivity(in);
+                    }
                     return true;
                 }
                 default:

@@ -43,13 +43,12 @@ public class variables_publicas {
     public static String vVisualizar = "vVisualizar";
 
 
-    //public static final String direccionIp = "http://192.168.0.245:8088";
     public static final String direccionIp = "http://190.212.127.107:8088";
-    //public static final String direccionIp = "http://192.168.1.180:8088";
+    //public static final String direccionIp = "http://192.168.0.7:8088";
     public static final String correosErrores = "cysnicaragua@gmail.com";
     public  static final String correoError= "cysnicaragua@gmail.com";
     //Variables BD
-    public static final int DATABASE_VERSION = 19;
+    public static final int DATABASE_VERSION = 21;
     public static final String DATABASE_NAME = "Safi_D.db";
     //Variables TB
     public static final String TABLE_ARTICULOS = "Articulos";
@@ -70,7 +69,7 @@ public class variables_publicas {
     public static final String TABLE_RUTAS= "Rutas";
     public static final String TABLE_PROMOCIONES= "Promociones";
     public static final String TABLE_ESCALAPRECIOS= "EscalaPrecios";
-
+    public static final String TABLE_MOTIVOS_NOVENTA="MotivosNoVenta";
     //Variables CamposTbArticulos
     public static final String ARTICULO_COLUMN_Codigo = "Codigo";
     public static final String ARTICULO_COLUMN_Nombre = "Nombre";
@@ -124,6 +123,10 @@ public class variables_publicas {
     public static final String CLIENTES_COLUMN_Pais_Nombre="Pais_Nombre";
     public static final String CLIENTES_COLUMN_IdTipoNegocio="IdTipoNegocio";
     public static final String CLIENTES_COLUMN_TipoNegocio="TipoNegocio";
+    public static final String CLIENTES_COLUMN_Latitud="Latitud";
+    public static final String CLIENTES_COLUMN_Longitud="Longitud";
+    public static final String CLIENTES_COLUMN_Referenciado="Referenciado";
+    public static final String CLIENTES_COLUMN_Visita="Visita";
     public static String VersionSistema = "";
     public static String info = "";
     //Variables CamposTbPedidos
@@ -141,6 +144,8 @@ public class variables_publicas {
     public static final String PEDIDOS_COLUMN_Subtotal = "subtotal";
     public static final String PEDIDOS_COLUMN_TCambio = "TCambio";
     public static final String PEDIDOS_COLUMN_Empresa = "Empresa";
+    public static final String PEDIDOS_COLUMN_Latitud = "Latitud";
+    public static final String PEDIDOS_COLUMN_Longitud = "Longitud";
 
     public static final String PEDIDOS_DETALLE_COLUMN_CodigoPedido = "CodigoPedido";
     public static final String PEDIDOS_DETALLE_COLUMN_CodigoArticulo = "CodigoArticulo";
@@ -261,6 +266,8 @@ public class variables_publicas {
     public static final String ESCALAPRECIOS_COLUMN_PRECIO2 = "Precio2";
     public static final String ESCALAPRECIOS_COLUMN_PRECIO3 = "Precio3";
 
+    public static  final String MOTIVOS_NOVENTA_COLUMN_codigo = "Codigo";
+    public static final String  MOTIVOS_NOVENTA_COLUMN_motivo ="Motivo";
     public final static int COUNTDOWN_FREQUENCY = 1000;
     public final static int VIBRATE_THRESHOLD = 30 * 1000;
     public final static int PLAY_SOUND_THRESHOLD = 15 * 1000;

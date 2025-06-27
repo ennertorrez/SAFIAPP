@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -48,6 +49,7 @@ public class EscalaPreciosHelper {
     }
 
 
+    @SuppressLint("Range")
     public HashMap<String, String> ObtenerEscala(int escala){
         HashMap<String,String> escalaprecios = new HashMap<String, String>();
 
@@ -68,6 +70,7 @@ public class EscalaPreciosHelper {
 
         return escalaprecios;
     }
+    @SuppressLint("Range")
     public int  BuscarCodEscala(String producto) {
 
         String selectQuery = "SELECT pr."+ variables_publicas.ESCALAPRECIOS_COLUMN_CODESCALA +" FROM "+variables_publicas.TABLE_ESCALAPRECIOS+" PR " +

@@ -11,6 +11,9 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -145,6 +148,10 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
     private SincronizarDatos sd;
     private boolean isOnline = false;
     private String visualizando="False";
+    private String Longitud="";
+    private String Latitud="";
+    private String LongitudGuardada="";
+    private String LatitudGuardada="";
     final String urlGetConfiguraciones = variables_publicas.direccionIp + "/ServicioPedidos.svc/GetConfiguraciones";
     //endregion
 
@@ -249,7 +256,83 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
         if (isOnline) {
             SincronizarConfig();
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+
+                return;
+            }
+            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            Location location = null;
+            LocationListener mlocListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+            if (locationManager != null) {
+                //Existe GPS_PROVIDER obtiene ubicación
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
+
+            if(location == null){ //Trata con NETWORK_PROVIDER
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mlocListener);
+                if (locationManager != null) {
+                    //Existe NETWORK_PROVIDER obtiene ubicación
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
+            }
+            if(location != null) {
+                Latitud = String.valueOf(location.getLatitude());
+                Longitud = String.valueOf(location.getLongitude());
+            }else {//Volvemos a preguntar por una segunda ocacion hasta encontrar la ultima ubicacion
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+                if (locationManager != null) {
+                    //Existe GPS_PROVIDER obtiene ubicación
+                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                }
+
+                if(location == null){ //Trata con NETWORK_PROVIDER
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mlocListener);
+                    if (locationManager != null) {
+                        //Existe NETWORK_PROVIDER obtiene ubicación
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    }
+                }
+                if(location != null) {
+                    Latitud = String.valueOf(location.getLatitude());
+                    Longitud = String.valueOf(location.getLongitude());
+                }else {
+                    Toast.makeText(this, "No se pudo obtener geolocalización", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
         df = new DecimalFormat("#0.00");
         DecimalFormatSymbols fmts = new DecimalFormatSymbols();
         fmts.setGroupingSeparator(',');
@@ -384,7 +467,8 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
             }
             txtObservaciones.setText(pedido.getObservacion());
             lblNoPedido.setText("PEDIDO N°: " + pedido.getCodigoPedido());
-
+            LatitudGuardada=pedido.getLatitud();
+            LongitudGuardada=pedido.getLongitud();
             List<ClienteSucursal> sucursales = ClientesSucursalH.ObtenerClienteSucursales(pedido.getIdCliente());
             int indice;
             for (int i = 0; i < sucursales.size(); i++) {
@@ -405,7 +489,12 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
         } else {
             cboSucursal.setSelection(0);
         }
-
+        if (!LatitudGuardada.equalsIgnoreCase("")){
+            Latitud=LatitudGuardada;
+        }
+        if (!LongitudGuardada.equalsIgnoreCase("") ){
+            Longitud=LongitudGuardada;
+        }
         // Loading spinner data from database
         CargaDatosCombo();
 
@@ -1348,6 +1437,8 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
         pedido.setFecha(variables_publicas.FechaActual);
         pedido.setUsuario(variables_publicas.usuario.getUsuario());
         pedido.setIMEI(IMEI);
+        pedido.setLatitud(Latitud);
+        pedido.setLongitud(Longitud);
         pedido.setTCambio(lblTc.getText().toString());
         pedido.setEmpresa(cliente.getEmpresa());
         //Esto lo ponemos para cuando es editar
@@ -1382,7 +1473,7 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
 
         boolean saved = PedidoH.GuardarPedido(pedido.getCodigoPedido(), pedido.getIdVendedor(), pedido.getIdCliente(), pedido.getTipo(),
                 txtObservaciones.getText().toString(), condicion.getCODIGO(), pedido.getIdSucursal(),
-                variables_publicas.FechaActual, variables_publicas.usuario.getUsuario(), IMEI, String.valueOf(subtotal), String.valueOf(total),df.format(Double.parseDouble(pedido.getTCambio())),pedido.getEmpresa());
+                variables_publicas.FechaActual, variables_publicas.usuario.getUsuario(), IMEI, String.valueOf(subtotal), String.valueOf(total),df.format(Double.parseDouble(pedido.getTCambio())),pedido.getEmpresa(),pedido.getLatitud(), pedido.getLongitud());
 
         if (!saved) {
             MensajeAviso("Ha Ocurrido un error al guardar los datos");
@@ -1395,7 +1486,7 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                 break;
             }
         }
-
+        ClientesH.ActualizarVisita(pedido.getIdCliente(),"Compra");
         return true;
     }
 
@@ -1865,18 +1956,12 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                     input.setText(itemArticulo2.get("Cantidad"));
                     input.setFocusable(true);
                     input.selectAll();
-                    input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                            input.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    InputMethodManager inputMethodManager= (InputMethodManager) PedidosActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    inputMethodManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
-                                }
-                            });
-                        }
-                    });
+					input.setOnFocusChangeListener((v, hasFocus) -> {
+						input.post(() -> {
+							InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+							imm.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+						});
+					});
                     input.requestFocus();
                     b.setView(input);
                     b.setPositiveButton("OK", new DialogInterface.OnClickListener()
@@ -1886,7 +1971,8 @@ public class PedidosActivity extends Activity implements ActivityCompat.OnReques
                         {
                             //I get a compile error here, it wants result to be final.
                             result[0] = input.getText().toString();
-                            if (!result[0].equalsIgnoreCase("")&&!result[0].equalsIgnoreCase("0")){
+							String cantidad = result[0].trim();
+                            if (!cantidad.isEmpty() && !cantidad.equals("0")){
 
                                 double subtotal, iva, total, descuento, porIva;
                                 String vprecio="0";

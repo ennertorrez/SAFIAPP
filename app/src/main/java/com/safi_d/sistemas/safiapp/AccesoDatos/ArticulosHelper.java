@@ -1,6 +1,7 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,6 +51,7 @@ public class ArticulosHelper {
     }
 
 
+    @SuppressLint("Range")
     public Articulo BuscarArticulo(String Codigo) {
         String selectQuery = "select * from " + variables_publicas.TABLE_ARTICULOS + " where " + variables_publicas.ARTICULO_COLUMN_Codigo + " like '%" + Codigo + "' LIMIT 1";
         Cursor c = database.rawQuery(selectQuery, null);
@@ -81,6 +83,7 @@ public class ArticulosHelper {
         return articulo;
     }
 
+    @SuppressLint("Range")
     public HashMap<String,String> BuscarArticuloHashMap(String Codigo) {
         String selectQuery = "select * from " + variables_publicas.TABLE_ARTICULOS + " where " + variables_publicas.ARTICULO_COLUMN_Codigo + " like '%" + Codigo + "' LIMIT 1";
         Cursor c = database.rawQuery(selectQuery, null);
@@ -111,6 +114,7 @@ public class ArticulosHelper {
         c.close();
         return articulo;
     }
+    @SuppressLint("Range")
     public ArrayList<HashMap<String, String>> BuscarArticuloCodigo(String Busqueda) {
         Cursor c= database.rawQuery("select * from " + variables_publicas.TABLE_ARTICULOS+" where "+variables_publicas.ARTICULO_COLUMN_Codigo+" like '%"+Busqueda+"%'", null);
         ArrayList<HashMap<String, String>> lst= new ArrayList<HashMap<String, String>> () ;
@@ -143,6 +147,7 @@ public class ArticulosHelper {
         return  lst;
     }
 
+    @SuppressLint("Range")
     public ArrayList<HashMap<String, String>> BuscarArticuloNombre(String Busqueda) {
         Busqueda= Busqueda.replace(" ","%");
         Cursor c= database.rawQuery("select * from " + variables_publicas.TABLE_ARTICULOS+" where "+variables_publicas.ARTICULO_COLUMN_Nombre+" like '%"+Busqueda+"%'", null);
@@ -176,6 +181,7 @@ public class ArticulosHelper {
         return  lst;
     }
 
+    @SuppressLint("Range")
     public List<Model> BuscarArticuloCodigoNew(String Busqueda) {
         Cursor c= database.rawQuery("select * from " + variables_publicas.TABLE_ARTICULOS+" where "+variables_publicas.ARTICULO_COLUMN_Codigo+" like '%"+Busqueda+"%'", null);
         List<Model> lst= new ArrayList<Model>();
@@ -187,6 +193,7 @@ public class ArticulosHelper {
         }
         return  lst;
     }
+    @SuppressLint("Range")
     public List<Model> BuscarArticuloNombreNew(String Busqueda) {
         Busqueda= Busqueda.replace(" ","%");
         Cursor c= database.rawQuery("select * from " + variables_publicas.TABLE_ARTICULOS+" where "+variables_publicas.ARTICULO_COLUMN_Nombre+" like '%"+Busqueda+"%'", null);

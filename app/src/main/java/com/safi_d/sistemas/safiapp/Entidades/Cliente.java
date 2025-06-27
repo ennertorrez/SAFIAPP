@@ -38,6 +38,10 @@ public class Cliente {
     private String Pais_Nombre= "";
     private String IdTipoNegocio= "";
     private String TipoNegocio= "";
+    private String Latitud= "";
+    private String Longitud= "";
+    private String Referenciado= "";
+    private String Visita = "";
     public Cliente() {
 
     }
@@ -47,7 +51,8 @@ public class Cliente {
     }
     public Cliente(String idCliente, String nombre, String fechaCreacion, String telefono, String direccion, String idDepartamento, String idMunicipio, String ciudad, String ruc, String cedula, String limiteCredito,
                    String idFormaPago, String idVendedor, String excento, String codigoLetra, String ruta,  String nombreRuta,String frecuencia, String precioEspecial, String fechaUltimaCompra, String tipo,String tipoPrecio,
-                   String descuento, String empleado, String idSupervisor, String empresa, String codZona, String codSubZona, String idPais,String nombrePais, String idTipoNegocio,String tipoNegocio) {
+                   String descuento, String empleado, String idSupervisor, String empresa, String codZona, String codSubZona, String idPais,String nombrePais, String idTipoNegocio,String tipoNegocio,String latitud,String longitud,
+                   String referenciado,String visita) {
         IdCliente = idCliente;
         Nombre = nombre;
         FechaCreacion = fechaCreacion;
@@ -80,6 +85,10 @@ public class Cliente {
         Pais_Nombre=nombrePais;
         IdTipoNegocio=idTipoNegocio;
         TipoNegocio =tipoNegocio;
+        Latitud =  latitud;
+        Longitud =  longitud;
+        Referenciado =  referenciado;
+        Visita = visita;
     }
 
     public String getIdCliente() {
@@ -326,7 +335,34 @@ public class Cliente {
 
         return  this.getNombre();
     }
+    public String getLatitud() {
+        return Latitud;
+    }
 
+    public void setLatitud(String latitud) {
+        Latitud  = latitud;
+    }
+
+    public String getLongitud() {
+        return Longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        Longitud = longitud;
+    }
+
+    public String getReferenciado() {
+        return Referenciado;
+    }
+
+    public void setReferenciado(String referenciado) {
+        Referenciado = referenciado;
+    }
+
+    public void setVisita(String visita) { Visita = visita;}
+    public String getVisita() {
+        return Visita;
+    }
     public String getPais_Id() {
         return Pais_Id;
     }

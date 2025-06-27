@@ -1,5 +1,6 @@
 package com.safi_d.sistemas.safiapp.AccesoDatos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,6 +9,7 @@ import android.util.Log;
 import com.safi_d.sistemas.safiapp.Auxiliar.variables_publicas;
 import com.safi_d.sistemas.safiapp.Entidades.Cliente;
 import com.safi_d.sistemas.safiapp.Entidades.Departamentos;
+import com.safi_d.sistemas.safiapp.Entidades.MotivosNoVenta;
 import com.safi_d.sistemas.safiapp.Entidades.Municipios;
 
 import java.util.ArrayList;
@@ -53,7 +55,11 @@ public class ClientesHelper {
                                       String Pais_Id,
                                       String Pais_Nombre,
                                       String IdTipoNegocio,
-                                      String tipoNegocio) {
+                                      String tipoNegocio,
+                                      String latitud,
+                                      String longitud,
+                                      String referenciado,
+                                      String visita) {
         long rows =0;
 
         ContentValues contentValues = new ContentValues();
@@ -90,6 +96,10 @@ public class ClientesHelper {
         contentValues.put(variables_publicas.CLIENTES_COLUMN_Pais_Nombre, Pais_Nombre );
         contentValues.put(variables_publicas.CLIENTES_COLUMN_IdTipoNegocio, IdTipoNegocio );
         contentValues.put(variables_publicas.CLIENTES_COLUMN_TipoNegocio, tipoNegocio );
+        contentValues.put(variables_publicas.CLIENTES_COLUMN_Latitud, latitud );
+        contentValues.put(variables_publicas.CLIENTES_COLUMN_Longitud, longitud );
+        contentValues.put(variables_publicas.CLIENTES_COLUMN_Referenciado, referenciado );
+        contentValues.put(variables_publicas.CLIENTES_COLUMN_Visita, visita );
 
        long inserted= database.insert(variables_publicas.TABLE_CLIENTES, null, contentValues);
         if(inserted!=-1)
@@ -136,9 +146,14 @@ public class ClientesHelper {
         contentValues.put(variables_publicas.CLIENTES_COLUMN_Pais_Nombre, cliente.get(variables_publicas.CLIENTES_COLUMN_Pais_Nombre));
         contentValues.put(variables_publicas.CLIENTES_COLUMN_IdTipoNegocio, cliente.get(variables_publicas.CLIENTES_COLUMN_IdTipoNegocio));
         contentValues.put(variables_publicas.CLIENTES_COLUMN_TipoNegocio, cliente.get(variables_publicas.CLIENTES_COLUMN_TipoNegocio));
+        contentValues.put(variables_publicas.CLIENTES_COLUMN_Latitud, cliente.get(variables_publicas.CLIENTES_COLUMN_Latitud));
+        contentValues.put(variables_publicas.CLIENTES_COLUMN_Longitud, cliente.get(variables_publicas.CLIENTES_COLUMN_Longitud));
+        contentValues.put(variables_publicas.CLIENTES_COLUMN_Referenciado, cliente.get(variables_publicas.CLIENTES_COLUMN_Referenciado));
+        contentValues.put(variables_publicas.CLIENTES_COLUMN_Visita, cliente.get(variables_publicas.CLIENTES_COLUMN_Visita));
         database.insert(variables_publicas.TABLE_CLIENTES, null, contentValues);
     }
 
+    @SuppressLint("Range")
     public ArrayList<HashMap<String, String>>  BuscarClientesNombre(String Busqueda) {
         Busqueda= Busqueda.replace(" ","%");
         Cursor c= database.rawQuery("SELECT * FROM "
@@ -180,6 +195,10 @@ public class ClientesHelper {
                 cliente.put(variables_publicas.CLIENTES_COLUMN_Pais_Nombre, c.getString(c.getColumnIndex("Pais_Nombre")));
                 cliente.put(variables_publicas.CLIENTES_COLUMN_IdTipoNegocio, c.getString(c.getColumnIndex("IdTipoNegocio")));
                 cliente.put(variables_publicas.CLIENTES_COLUMN_TipoNegocio, c.getString(c.getColumnIndex("TipoNegocio")));
+                cliente.put(variables_publicas.CLIENTES_COLUMN_Latitud, c.getString(c.getColumnIndex("Latitud")));
+                cliente.put(variables_publicas.CLIENTES_COLUMN_Longitud, c.getString(c.getColumnIndex("Longitud")));
+                cliente.put(variables_publicas.CLIENTES_COLUMN_Referenciado, c.getString(c.getColumnIndex("Referenciado")));
+                cliente.put(variables_publicas.CLIENTES_COLUMN_Visita, c.getString(c.getColumnIndex("Visita")));
                         lst.add(cliente);
 
             }while (c.moveToNext());
@@ -188,6 +207,7 @@ public class ClientesHelper {
         return  lst;
     }
 
+    @SuppressLint("Range")
     public ArrayList<HashMap<String, String>>  BuscarClientesCodigo(String Busqueda) {
         Cursor c= database.rawQuery("SELECT * FROM "
                 + variables_publicas.TABLE_CLIENTES+" WHERE "+variables_publicas.CLIENTES_COLUMN_IdCliente+" = CASE WHEN '' = '"+Busqueda+"' THEN "+variables_publicas.CLIENTES_COLUMN_IdCliente+" ELSE '"+Busqueda+"' END ", null);
@@ -228,6 +248,10 @@ public class ClientesHelper {
                 cliente.put(variables_publicas.CLIENTES_COLUMN_Pais_Nombre, c.getString(c.getColumnIndex("Pais_Nombre")));
                 cliente.put(variables_publicas.CLIENTES_COLUMN_IdTipoNegocio, c.getString(c.getColumnIndex("IdTipoNegocio")));
                 cliente.put(variables_publicas.CLIENTES_COLUMN_TipoNegocio, c.getString(c.getColumnIndex("TipoNegocio")));
+                cliente.put(variables_publicas.CLIENTES_COLUMN_Latitud, c.getString(c.getColumnIndex("Latitud")));
+                cliente.put(variables_publicas.CLIENTES_COLUMN_Longitud, c.getString(c.getColumnIndex("Longitud")));
+                cliente.put(variables_publicas.CLIENTES_COLUMN_Referenciado, c.getString(c.getColumnIndex("Referenciado")));
+                cliente.put(variables_publicas.CLIENTES_COLUMN_Visita, c.getString(c.getColumnIndex("Visita")));
                 lst.add(cliente);
 
             }while (c.moveToNext());
@@ -236,6 +260,7 @@ public class ClientesHelper {
         return  lst;
     }
 
+    @SuppressLint("Range")
     public HashMap<String, String>  ObtenerClienteGuardado(String Busqueda) {
         String sql="SELECT * FROM "
                 + variables_publicas.TABLE_CLIENTES+" WHERE "+variables_publicas.CLIENTES_COLUMN_IdCliente+" = CASE WHEN '' = '"+Busqueda+"' THEN "+variables_publicas.CLIENTES_COLUMN_IdCliente+" ELSE '"+Busqueda+"' END ";
@@ -296,6 +321,7 @@ public class ClientesHelper {
         Log.d("clientes_elimina", "Datos eliminados");
     }
 
+    @SuppressLint("Range")
     public Cliente BuscarCliente(String Codigo){
         Cliente cli= new Cliente();
         String sql="select * from " + variables_publicas.TABLE_CLIENTES + " Where IdCliente = "+Codigo +" ";
@@ -333,7 +359,11 @@ public class ClientesHelper {
                         c.getString(c.getColumnIndex(variables_publicas.CLIENTES_COLUMN_Pais_Id)),
                         c.getString(c.getColumnIndex(variables_publicas.CLIENTES_COLUMN_Pais_Nombre)),
                         c.getString(c.getColumnIndex(variables_publicas.CLIENTES_COLUMN_IdTipoNegocio)),
-                        c.getString(c.getColumnIndex(variables_publicas.CLIENTES_COLUMN_TipoNegocio))
+                        c.getString(c.getColumnIndex(variables_publicas.CLIENTES_COLUMN_TipoNegocio)),
+                        c.getString(c.getColumnIndex(variables_publicas.CLIENTES_COLUMN_Latitud)),
+                        c.getString(c.getColumnIndex(variables_publicas.CLIENTES_COLUMN_Longitud)),
+                        c.getString(c.getColumnIndex(variables_publicas.CLIENTES_COLUMN_Referenciado)),
+                        c.getString(c.getColumnIndex(variables_publicas.CLIENTES_COLUMN_Visita))
                 );
             }while (c.moveToNext());
         }
@@ -341,6 +371,7 @@ public class ClientesHelper {
         return cli;
     }
 
+    @SuppressLint("Range")
     public List<Departamentos> ObtenerListaDepartamentos() {
         List<Departamentos> list = new ArrayList<Departamentos>();
         String Query = "SELECT DISTINCT " + variables_publicas.DPTOMUNIBARRIOS_COLUMN_Codigo_Departamento + " ," + variables_publicas.DPTOMUNIBARRIOS_COLUMN_Nombre_Departamento + " FROM " + variables_publicas.TABLE_DPTOMUNIBARRIOS + " ORDER BY "+ variables_publicas.DPTOMUNIBARRIOS_COLUMN_Nombre_Departamento+";";
@@ -357,6 +388,7 @@ public class ClientesHelper {
         return list;
     }
 
+    @SuppressLint("Range")
     public List<Municipios> ObtenerListaMunicipios(String DesDepto) {
         List<Municipios> list = new ArrayList<Municipios>();
         String Query = "SELECT DISTINCT " + variables_publicas.DPTOMUNIBARRIOS_COLUMN_Codigo_Municipio + " ," + variables_publicas.DPTOMUNIBARRIOS_COLUMN_Nombre_Municipio + " FROM " + variables_publicas.TABLE_DPTOMUNIBARRIOS + " WHERE "+ variables_publicas.DPTOMUNIBARRIOS_COLUMN_Nombre_Departamento + "= '"+ DesDepto + "' ORDER BY "+ variables_publicas.DPTOMUNIBARRIOS_COLUMN_Nombre_Municipio+";";
@@ -375,7 +407,8 @@ public class ClientesHelper {
     }
 
 
-    public ArrayList<HashMap<String, String>> BuscarCedulaClientes( String vCedula) {
+    @SuppressLint("Range")
+    public ArrayList<HashMap<String, String>> BuscarCedulaClientes(String vCedula) {
         String Query = "SELECT DISTINCT " + variables_publicas.CLIENTES_COLUMN_IdCliente + ", " + variables_publicas.CLIENTES_COLUMN_Nombre + " FROM " + variables_publicas.TABLE_CLIENTES + " WHERE "+ variables_publicas.CLIENTES_COLUMN_Cedula + "= '"+ vCedula + "' LIMIT 1;";
         Cursor c = database.rawQuery(Query, null);
         ArrayList<HashMap<String, String>> lst= new ArrayList<HashMap<String, String>> () ;
@@ -425,6 +458,35 @@ public class ClientesHelper {
         return deletedrows!=-1;
     }
 
+    @SuppressLint("Range")
+    public String EsReferenciado(String  codigo, String codcv) {
+
+        String Query = "SELECT * FROM " + variables_publicas.TABLE_CLIENTES + " WHERE "+ variables_publicas.CLIENTES_COLUMN_IdCliente + "= "+ codigo  +" ;";
+        //String Query = "SELECT count(*) FROM " + variables_publicas.TABLE_CLIENTES + " ;";
+        Cursor c = database.rawQuery(Query, null);
+        String resultado = "0";
+        if (c.moveToFirst()) {
+            do {
+                resultado =c.getString(c.getColumnIndex(variables_publicas.CLIENTES_COLUMN_Referenciado));
+
+            } while (c.moveToNext());
+        }
+        c.close();
+        if (resultado==null){
+            resultado="0";
+        }
+        return resultado;
+    }
+    public  boolean ActualizarLocalizacionLocal(String Codigo,String lat, String longitud) {
+        ContentValues con = new ContentValues();
+        con.put(variables_publicas.CLIENTES_COLUMN_Latitud, lat);
+        con.put(variables_publicas.CLIENTES_COLUMN_Longitud, longitud);
+        con.put(variables_publicas.CLIENTES_COLUMN_Referenciado, "1");
+        long rowUpdated = database.update(variables_publicas.TABLE_CLIENTES, con,  variables_publicas.CLIENTES_COLUMN_IdCliente + "= " + Codigo +"", null);
+        if (rowUpdated != -1)
+            return true;
+        else return false;
+    }
     public String ObtenerCodLetra(String valorFiltro) {
 
         String sql="SELECT " + variables_publicas.CLIENTES_COLUMN_CodigoLetra + " AS codletra FROM "
@@ -441,7 +503,8 @@ public class ClientesHelper {
         c.close();
         return resultado;
     }
-    public HashMap<String, String> ObtenerDatosClientesParcial(String Codigo,String CodCv) {
+    @SuppressLint("Range")
+    public HashMap<String, String> ObtenerDatosClientesParcial(String Codigo, String CodCv) {
 
         String sql="select IdCliente,CodCv,Nombre,NombreCliente,Telefono,Direccion,Cedula,IdVendedor,Ruta,Frecuencia from " + variables_publicas.TABLE_CLIENTES + " Where IdCliente = "+Codigo +" AND CodCv = '"+CodCv.replace("Cod_Cv: ","")+"' ";
         Cursor c = database.rawQuery(sql,null);
@@ -462,5 +525,47 @@ public class ClientesHelper {
         }
         c.close();
         return cliente;
+    }
+    public boolean ActualizarVisita(String Cliente, String Visita) {
+        ContentValues con = new ContentValues();
+        con.put(variables_publicas.CLIENTES_COLUMN_Visita, Visita);
+
+        long rowsUpdated = database.update(variables_publicas.TABLE_CLIENTES, con, variables_publicas.CLIENTES_COLUMN_IdCliente + "= " + Cliente + "", null);
+        if (rowsUpdated != -1)
+            return true;
+        else
+            return false;
+    }
+
+    public boolean EliminarMotivosNoVenta() {
+        long deletedrows=  database.delete( variables_publicas.TABLE_MOTIVOS_NOVENTA,null,null);
+        Log.d("motivos_noventa_deleted", "Datos eliminados");
+        return deletedrows!=-1;
+    }
+    public boolean GuardarMotivosNoVenta(String cod, String motivo){
+        long rows = 0;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(variables_publicas.MOTIVOS_NOVENTA_COLUMN_codigo, cod);
+        contentValues.put(variables_publicas.MOTIVOS_NOVENTA_COLUMN_motivo, motivo);
+        long rowInserted = database.insert(variables_publicas.TABLE_MOTIVOS_NOVENTA, null, contentValues);
+        if (rowInserted != -1)
+            return true;
+        else return false;
+    }
+    @SuppressLint("Range")
+    public List<MotivosNoVenta> ObtenerListaMotivosNoVenta() {
+        List<MotivosNoVenta> list = new ArrayList<MotivosNoVenta>();
+        String Query = "SELECT DISTINCT " + variables_publicas.MOTIVOS_NOVENTA_COLUMN_codigo + " ," + variables_publicas.MOTIVOS_NOVENTA_COLUMN_motivo + " FROM " + variables_publicas.TABLE_MOTIVOS_NOVENTA + " ORDER BY "+ variables_publicas.MOTIVOS_NOVENTA_COLUMN_codigo+";";
+        Cursor c = database.rawQuery(Query, null);
+        if (c.moveToFirst()) {
+            do {
+                list.add(new MotivosNoVenta(
+                        c.getString(c.getColumnIndex("Codigo")),
+                        c.getString(c.getColumnIndex("Motivo"))
+                ));
+            } while (c.moveToNext());
+        }
+        c.close();
+        return list;
     }
 }
